@@ -205,13 +205,15 @@ export default function ApplicationsPage() {
     <main className="min-h-screen bg-gray-50 px-4 py-8 md:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              My Applications
-            </h1>
-            <p className="mt-2 text-gray-600">
-              View and manage your tracked job applications.
-            </p>
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-3xl font-bold">My Applications</h1>
+
+            <button
+              onClick={() => router.push("/applications/new")}
+              className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
+            >
+              + Add Application
+            </button>
           </div>
 
           <button
