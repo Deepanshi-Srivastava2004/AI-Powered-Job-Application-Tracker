@@ -1,0 +1,96 @@
+/*  We're basically telling Prisma: - "Hey Prisma, JobPilot is going to use MySQL, and generate a client that our Next.js code can use."
+
+// Prisma schema for JobPilot
+// This file defines the structure of our database.
+
+// This tells Prisma which database we are using.
+// "mysql" means our database is MySQL.
+datasource db {
+  provider = "mysql"
+}
+
+// This tells Prisma to generate Prisma Client,
+// which our Next.js application will use to communicate
+// with the MySQL database.
+generator client {
+  provider = "prisma-client-js"
+}
+*/
+
+
+
+
+
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Represents a JobPilot user.
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String   @unique
+  password  String   // We'll store a password hash, never a plain password.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One user can have multiple job applications and resumes.
+  applications Application[]
+  resumes      Resume[]
+}
+
+// Stores a job application.
+model Application {
+  id              Int      @id @default(autoincrement())
+  company         String
+  jobTitle        String
+  jobDescription  String?  @db.Text
+  jobUrl          String?  @db.VarChar(2048)
+  applicationDate DateTime @default(now())
+  status          String   @default("APPLIED")
+  matchScore      Int?
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Connects this application to its owner.
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+// Stores resume details.
+model Resume {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?  @db.LongText
+  fileUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Connects this resume to its owner.
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+
+/*
+@id — identifies each record uniquely.
+@default(autoincrement()) — generates a new numeric ID automatically.
+@unique — prevents duplicate email addresses.
+@relation — links applications and resumes to their users.
+@default(now()) — records the creation time automatically.
+onDelete: Cascade — removes a user's related records if that user is deleted.
+*/
