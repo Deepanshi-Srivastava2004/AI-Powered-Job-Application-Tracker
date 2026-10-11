@@ -27,6 +27,26 @@ export default function ApplicationsPage() {
   const router = useRouter();
 
   const [applications, setApplications] = useState<Application[]>([]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+
+  const filteredApplications = applications.filter((application) => {
+    // Check whether the company or job title matches the search.
+    const search = searchTerm.trim().toLowerCase();
+
+    const matchesSearch =
+      application.company.toLowerCase().includes(search) ||
+      application.jobTitle.toLowerCase().includes(search);
+
+    // Check whether the selected status matches the application.
+    const matchesStatus =
+      statusFilter === "ALL" || application.status === statusFilter;
+
+    // Show an application only when both conditions match.
+    return matchesSearch && matchesStatus;
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updatingId, setUpdatingId] = useState<number | null>(null);
@@ -225,6 +245,31 @@ export default function ApplicationsPage() {
           </button>
         </div>
 
+        {/* Search and filter controls */}
+        <div className="mt-6 flex flex-col gap-4 sm:flex-row">
+          {/* Search by company or job title */}
+          <input
+            type="text"
+            placeholder="Search by company or job title..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          />
+
+          {/* Filter applications by status */}
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 sm:w-56"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="APPLIED">Applied</option>
+            <option value="INTERVIEW">Interview</option>
+            <option value="OFFER">Offer</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+
         {error && (
           <p
             role="alert"
@@ -261,235 +306,250 @@ export default function ApplicationsPage() {
         {!loading && applications.length > 0 && (
           <section className="mt-8 space-y-4">
             <p className="text-sm text-gray-500">
-              {applications.length} application
-              {applications.length === 1 ? "" : "s"} found
+              {filteredApplications.length} application
+              {filteredApplications.length === 1 ? "" : "s"} found
             </p>
 
-            {applications.map((application) => (
-              <article
-                key={application.id}
-                className="rounded-xl border bg-white p-5 shadow-sm"
-              >
-                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-900">
-                      {application.jobTitle}
-                    </h2>
-                    <p className="mt-1 text-gray-600">{application.company}</p>
-                    <p className="mt-3 text-sm text-gray-500">
-                      Applied on:{" "}
-                      {new Date(
-                        application.applicationDate,
-                      ).toLocaleDateString()}
-                    </p>
+            {filteredApplications.length === 0 ? (
+              <div className="rounded-xl border bg-white p-8 text-center">
+                <h2 className="text-lg font-semibold">
+                  No matching applications
+                </h2>
+                <p className="mt-2 text-gray-600">
+                  Try another search term or select a different status.
+                </p>
+              </div>
+            ) : (
+              filteredApplications.map((application) => (
+                <article
+                  key={application.id}
+                  className="rounded-xl border bg-white p-5 shadow-sm"
+                >
+                  <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                    <div>
+                      <h2 className="text-xl font-semibold text-gray-900">
+                        {application.jobTitle}
+                      </h2>
+                      <p className="mt-1 text-gray-600">
+                        {application.company}
+                      </p>
+                      <p className="mt-3 text-sm text-gray-500">
+                        Applied on:{" "}
+                        {new Date(
+                          application.applicationDate,
+                        ).toLocaleDateString()}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label
+                        htmlFor={`status-${application.id}`}
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Application Status
+                      </label>
+
+                      <select
+                        id={`status-${application.id}`}
+                        value={application.status}
+                        disabled={updatingId === application.id}
+                        onChange={(event) =>
+                          handleStatusChange(application.id, event.target.value)
+                        }
+                        className="rounded-lg border bg-white px-3 py-2 text-sm"
+                      >
+                        {applicationStatuses.map((status) => (
+                          <option key={status} value={status}>
+                            {status.charAt(0) + status.slice(1).toLowerCase()}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col gap-2">
-                    <label
-                      htmlFor={`status-${application.id}`}
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Application Status
-                    </label>
+                  {editingId === application.id ? (
+                    <form onSubmit={handleSaveEdit} className="mt-6 space-y-4">
+                      <h3 className="text-lg font-semibold">
+                        Edit Application
+                      </h3>
 
-                    <select
-                      id={`status-${application.id}`}
-                      value={application.status}
-                      disabled={updatingId === application.id}
-                      onChange={(event) =>
-                        handleStatusChange(application.id, event.target.value)
-                      }
-                      className="rounded-lg border bg-white px-3 py-2 text-sm"
-                    >
-                      {applicationStatuses.map((status) => (
-                        <option key={status} value={status}>
-                          {status.charAt(0) + status.slice(1).toLowerCase()}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+                      <div>
+                        <label
+                          htmlFor="edit-company"
+                          className="mb-1 block text-sm font-medium"
+                        >
+                          Company Name *
+                        </label>
+                        <input
+                          id="edit-company"
+                          required
+                          value={formData.company}
+                          onChange={(event) =>
+                            setFormData({
+                              ...formData,
+                              company: event.target.value,
+                            })
+                          }
+                          className="w-full rounded-lg border px-3 py-2"
+                        />
+                      </div>
 
-                {editingId === application.id ? (
-                  <form onSubmit={handleSaveEdit} className="mt-6 space-y-4">
-                    <h3 className="text-lg font-semibold">Edit Application</h3>
+                      <div>
+                        <label
+                          htmlFor="edit-title"
+                          className="mb-1 block text-sm font-medium"
+                        >
+                          Job Title *
+                        </label>
+                        <input
+                          id="edit-title"
+                          required
+                          value={formData.jobTitle}
+                          onChange={(event) =>
+                            setFormData({
+                              ...formData,
+                              jobTitle: event.target.value,
+                            })
+                          }
+                          className="w-full rounded-lg border px-3 py-2"
+                        />
+                      </div>
 
-                    <div>
-                      <label
-                        htmlFor="edit-company"
-                        className="mb-1 block text-sm font-medium"
-                      >
-                        Company Name *
-                      </label>
-                      <input
-                        id="edit-company"
-                        required
-                        value={formData.company}
-                        onChange={(event) =>
-                          setFormData({
-                            ...formData,
-                            company: event.target.value,
-                          })
-                        }
-                        className="w-full rounded-lg border px-3 py-2"
-                      />
-                    </div>
+                      <div>
+                        <label
+                          htmlFor="edit-description"
+                          className="mb-1 block text-sm font-medium"
+                        >
+                          Job Description
+                        </label>
+                        <textarea
+                          id="edit-description"
+                          rows={4}
+                          value={formData.jobDescription}
+                          onChange={(event) =>
+                            setFormData({
+                              ...formData,
+                              jobDescription: event.target.value,
+                            })
+                          }
+                          className="w-full rounded-lg border px-3 py-2"
+                        />
+                      </div>
 
-                    <div>
-                      <label
-                        htmlFor="edit-title"
-                        className="mb-1 block text-sm font-medium"
-                      >
-                        Job Title *
-                      </label>
-                      <input
-                        id="edit-title"
-                        required
-                        value={formData.jobTitle}
-                        onChange={(event) =>
-                          setFormData({
-                            ...formData,
-                            jobTitle: event.target.value,
-                          })
-                        }
-                        className="w-full rounded-lg border px-3 py-2"
-                      />
-                    </div>
+                      <div>
+                        <label
+                          htmlFor="edit-url"
+                          className="mb-1 block text-sm font-medium"
+                        >
+                          Job Posting URL
+                        </label>
+                        <input
+                          id="edit-url"
+                          type="url"
+                          value={formData.jobUrl}
+                          onChange={(event) =>
+                            setFormData({
+                              ...formData,
+                              jobUrl: event.target.value,
+                            })
+                          }
+                          className="w-full rounded-lg border px-3 py-2"
+                        />
+                      </div>
 
-                    <div>
-                      <label
-                        htmlFor="edit-description"
-                        className="mb-1 block text-sm font-medium"
-                      >
-                        Job Description
-                      </label>
-                      <textarea
-                        id="edit-description"
-                        rows={4}
-                        value={formData.jobDescription}
-                        onChange={(event) =>
-                          setFormData({
-                            ...formData,
-                            jobDescription: event.target.value,
-                          })
-                        }
-                        className="w-full rounded-lg border px-3 py-2"
-                      />
-                    </div>
+                      <div>
+                        <label
+                          htmlFor="edit-notes"
+                          className="mb-1 block text-sm font-medium"
+                        >
+                          Notes
+                        </label>
+                        <textarea
+                          id="edit-notes"
+                          rows={3}
+                          value={formData.notes}
+                          onChange={(event) =>
+                            setFormData({
+                              ...formData,
+                              notes: event.target.value,
+                            })
+                          }
+                          className="w-full rounded-lg border px-3 py-2"
+                        />
+                      </div>
 
-                    <div>
-                      <label
-                        htmlFor="edit-url"
-                        className="mb-1 block text-sm font-medium"
-                      >
-                        Job Posting URL
-                      </label>
-                      <input
-                        id="edit-url"
-                        type="url"
-                        value={formData.jobUrl}
-                        onChange={(event) =>
-                          setFormData({
-                            ...formData,
-                            jobUrl: event.target.value,
-                          })
-                        }
-                        className="w-full rounded-lg border px-3 py-2"
-                      />
-                    </div>
+                      <div className="flex flex-wrap gap-3">
+                        <button
+                          type="submit"
+                          disabled={updatingId === application.id}
+                          className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                        >
+                          {updatingId === application.id
+                            ? "Saving..."
+                            : "Save Changes"}
+                        </button>
 
-                    <div>
-                      <label
-                        htmlFor="edit-notes"
-                        className="mb-1 block text-sm font-medium"
-                      >
-                        Notes
-                      </label>
-                      <textarea
-                        id="edit-notes"
-                        rows={3}
-                        value={formData.notes}
-                        onChange={(event) =>
-                          setFormData({
-                            ...formData,
-                            notes: event.target.value,
-                          })
-                        }
-                        className="w-full rounded-lg border px-3 py-2"
-                      />
-                    </div>
+                        <button
+                          type="button"
+                          onClick={() => setEditingId(null)}
+                          className="rounded-lg border px-4 py-2 font-medium hover:bg-gray-50"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      {application.jobDescription && (
+                        <p className="mt-4 whitespace-pre-wrap text-sm text-gray-600">
+                          {application.jobDescription}
+                        </p>
+                      )}
 
-                    <div className="flex flex-wrap gap-3">
-                      <button
-                        type="submit"
-                        disabled={updatingId === application.id}
-                        className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
-                      >
-                        {updatingId === application.id
-                          ? "Saving..."
-                          : "Save Changes"}
-                      </button>
+                      {application.jobUrl && (
+                        <a
+                          href={application.jobUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-block break-all text-sm text-blue-600 hover:underline"
+                        >
+                          View Job Posting ↗
+                        </a>
+                      )}
 
-                      <button
-                        type="button"
-                        onClick={() => setEditingId(null)}
-                        className="rounded-lg border px-4 py-2 font-medium hover:bg-gray-50"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                  <>
-                    {application.jobDescription && (
-                      <p className="mt-4 whitespace-pre-wrap text-sm text-gray-600">
-                        {application.jobDescription}
-                      </p>
-                    )}
+                      {application.notes && (
+                        <p className="mt-3 text-sm text-gray-600">
+                          <span className="font-medium">Notes:</span>{" "}
+                          {application.notes}
+                        </p>
+                      )}
 
-                    {application.jobUrl && (
-                      <a
-                        href={application.jobUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-3 inline-block break-all text-sm text-blue-600 hover:underline"
-                      >
-                        View Job Posting ↗
-                      </a>
-                    )}
+                      <div className="mt-5 flex flex-wrap gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(application)}
+                          disabled={updatingId === application.id}
+                          className="rounded-lg border px-4 py-2 font-medium hover:bg-gray-50 disabled:opacity-60"
+                        >
+                          Edit
+                        </button>
 
-                    {application.notes && (
-                      <p className="mt-3 text-sm text-gray-600">
-                        <span className="font-medium">Notes:</span>{" "}
-                        {application.notes}
-                      </p>
-                    )}
-
-                    <div className="mt-5 flex flex-wrap gap-3">
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(application)}
-                        disabled={updatingId === application.id}
-                        className="rounded-lg border px-4 py-2 font-medium hover:bg-gray-50 disabled:opacity-60"
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(application.id)}
-                        disabled={updatingId === application.id}
-                        className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 disabled:opacity-60"
-                      >
-                        {updatingId === application.id
-                          ? "Please wait..."
-                          : "Delete"}
-                      </button>
-                    </div>
-                  </>
-                )}
-              </article>
-            ))}
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(application.id)}
+                          disabled={updatingId === application.id}
+                          className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 disabled:opacity-60"
+                        >
+                          {updatingId === application.id
+                            ? "Please wait..."
+                            : "Delete"}
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </article>
+              ))
+            )}
           </section>
         )}
       </div>
