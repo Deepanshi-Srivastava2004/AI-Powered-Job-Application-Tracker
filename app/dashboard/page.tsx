@@ -56,6 +56,14 @@ export default function DashboardPage() {
   // Calculate summary counts from the fetched applications.
   const totalApplications = applications.length;
 
+  // Show only the five most recently created applications.
+  const recentApplications = [...applications]
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    .slice(0, 5);
+
   const appliedCount = applications.filter(
     (app) => app.status.toUpperCase() === "APPLIED",
   ).length;
@@ -67,6 +75,17 @@ export default function DashboardPage() {
   const offerCount = applications.filter(
     (app) => app.status.toUpperCase() === "OFFER",
   ).length;
+
+  // Count applications that have been rejected.
+  const rejectedCount = applications.filter(
+    (app) => app.status.toUpperCase() === "REJECTED",
+  ).length;
+
+  // Calculate the percentage of applications that resulted in offers.
+  const offerRate =
+    totalApplications === 0
+      ? 0
+      : Math.round((offerCount / totalApplications) * 100);
 
   // Display a loading message while fetching data.
   if (loading) {
@@ -92,29 +111,41 @@ export default function DashboardPage() {
       )}
 
       {/* Four summary cards with dynamically calculated counts. */}
-      <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <p className="text-sm text-gray-500">Total Applications</p>
           <p className="mt-2 text-3xl font-bold">{totalApplications}</p>
           <p className="mt-2 text-sm text-gray-500">All tracked applications</p>
         </div>
-
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <p className="text-sm text-gray-500">Applied</p>
           <p className="mt-2 text-3xl font-bold">{appliedCount}</p>
           <p className="mt-2 text-sm text-gray-500">Applications submitted</p>
         </div>
-
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <p className="text-sm text-gray-500">Interviews</p>
           <p className="mt-2 text-3xl font-bold">{interviewCount}</p>
           <p className="mt-2 text-sm text-gray-500">Interview stage</p>
         </div>
-
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <p className="text-sm text-gray-500">Offers</p>
           <p className="mt-2 text-3xl font-bold">{offerCount}</p>
           <p className="mt-2 text-sm text-gray-500">Offers received</p>
+        </div>
+        {/* Rejected applications card */}
+        <div className="rounded-xl border bg-white p-5 shadow-sm">
+          <p className="text-sm text-gray-500">Rejected</p>
+          <p className="mt-2 text-3xl font-bold">{rejectedCount}</p>
+          <p className="mt-2 text-sm text-gray-500">Applications rejected</p>
+        </div>
+
+        {/* Offer rate card */}
+        <div className="rounded-xl border bg-white p-5 shadow-sm">
+          <p className="text-sm text-gray-500">Offer Rate</p>
+          <p className="mt-2 text-3xl font-bold">{offerRate}%</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Applications resulting in offers
+          </p>
         </div>
       </section>
 
@@ -128,7 +159,7 @@ export default function DashboardPage() {
           </p>
         ) : (
           <div className="mt-4 space-y-4">
-            {applications.map((application) => (
+            {recentApplications.map((application) => (
               <article
                 key={application.id}
                 className="rounded-xl border p-5 shadow-sm"
