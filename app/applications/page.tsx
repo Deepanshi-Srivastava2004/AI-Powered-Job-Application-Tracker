@@ -226,11 +226,13 @@ export default function ApplicationsPage() {
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold">My Applications</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              My Applications
+            </h1>
 
             <button
               onClick={() => router.push("/applications/new")}
-              className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
+              className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
             >
               + Add Application
             </button>
@@ -239,9 +241,9 @@ export default function ApplicationsPage() {
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="w-fit rounded-lg border bg-white px-4 py-2 font-medium hover:bg-gray-100"
+            className="w-fit rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-200"
           >
-            Back to Dashboard
+            ← Back to Dashboard
           </button>
         </div>
 
@@ -253,14 +255,14 @@ export default function ApplicationsPage() {
             placeholder="Search by company or job title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
           />
 
           {/* Filter applications by status */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 sm:w-56"
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:w-56"
           >
             <option value="ALL">All Statuses</option>
             <option value="APPLIED">Applied</option>
@@ -323,7 +325,7 @@ export default function ApplicationsPage() {
               filteredApplications.map((application) => (
                 <article
                   key={application.id}
-                  className="rounded-xl border bg-white p-5 shadow-sm"
+                  className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/30 hover:shadow-md"
                 >
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                     <div>
@@ -356,7 +358,7 @@ export default function ApplicationsPage() {
                         onChange={(event) =>
                           handleStatusChange(application.id, event.target.value)
                         }
-                        className="rounded-lg border bg-white px-3 py-2 text-sm"
+                        className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {applicationStatuses.map((status) => (
                           <option key={status} value={status}>
@@ -390,7 +392,7 @@ export default function ApplicationsPage() {
                               company: event.target.value,
                             })
                           }
-                          className="w-full rounded-lg border px-3 py-2"
+                          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
                         />
                       </div>
 

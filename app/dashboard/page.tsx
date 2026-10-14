@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 // Defines the structure of one job application.
 type Application = {
@@ -87,6 +88,15 @@ export default function DashboardPage() {
       ? 0
       : Math.round((offerCount / totalApplications) * 100);
 
+  // Calculate the percentage of applications that reached
+  // the Interview or Offer stage.
+  const progressCount = interviewCount + offerCount;
+
+  const jobSearchProgress =
+    totalApplications === 0
+      ? 0
+      : Math.round((progressCount / totalApplications) * 100);
+
   // Display a loading message while fetching data.
   if (loading) {
     return (
@@ -112,51 +122,81 @@ export default function DashboardPage() {
 
       {/* Four summary cards with dynamically calculated counts. */}
       <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-blue-100 bg-gradient-to-br from-white to-blue-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Total Applications</p>
           <p className="mt-2 text-3xl font-bold">{totalApplications}</p>
           <p className="mt-2 text-sm text-gray-500">All tracked applications</p>
         </div>
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-sky-100 bg-gradient-to-br from-white to-sky-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Applied</p>
           <p className="mt-2 text-3xl font-bold">{appliedCount}</p>
           <p className="mt-2 text-sm text-gray-500">Applications submitted</p>
         </div>
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-purple-100 bg-gradient-to-br from-white to-purple-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Interviews</p>
           <p className="mt-2 text-3xl font-bold">{interviewCount}</p>
           <p className="mt-2 text-sm text-gray-500">Interview stage</p>
         </div>
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-green-100 bg-gradient-to-br from-white to-green-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Offers</p>
           <p className="mt-2 text-3xl font-bold">{offerCount}</p>
           <p className="mt-2 text-sm text-gray-500">Offers received</p>
         </div>
         {/* Rejected applications card */}
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-red-100 bg-gradient-to-br from-white to-red-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Rejected</p>
           <p className="mt-2 text-3xl font-bold">{rejectedCount}</p>
           <p className="mt-2 text-sm text-gray-500">Applications rejected</p>
         </div>
 
         {/* Offer rate card */}
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
+        <div className="rounded-xl border border-amber-100 bg-gradient-to-br from-white to-amber-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Offer Rate</p>
           <p className="mt-2 text-3xl font-bold">{offerRate}%</p>
           <p className="mt-2 text-sm text-gray-500">
             Applications resulting in offers
           </p>
         </div>
+
+        <div className="rounded-xl border border-teal-100 bg-gradient-to-br from-white to-teal-50 p-5 shadow-sm transition-shadow hover:shadow-md">
+          <p className="text-sm text-gray-500">Job Search Progress</p>
+          <p className="mt-2 text-3xl font-bold">{jobSearchProgress}%</p>
+          <p className="mt-2 text-sm text-gray-500">
+            Applications reaching interview or offer stage
+          </p>
+        </div>
       </section>
 
       {/* List the applications fetched from the database. */}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold">Recent Applications</h2>
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+          <h2 className="text-xl font-semibold">Recent Applications</h2>
+
+          <Link
+            href="/applications"
+            className="text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
+          >
+            View all applications →
+          </Link>
+        </div>
 
         {applications.length === 0 ? (
-          <p className="mt-4 text-gray-500">
-            No applications found. Add your first application!
-          </p>
+          <div className="mt-4 rounded-xl border border-dashed border-gray-300 bg-white p-8 text-center">
+            <h3 className="text-lg font-semibold text-gray-800">
+              No applications yet
+            </h3>
+
+            <p className="mt-2 text-sm text-gray-500">
+              Start tracking your job search by adding your first application.
+            </p>
+
+            <Link
+              href="/applications/new"
+              className="mt-5 inline-block rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+            >
+              + Add Your First Application
+            </Link>
+          </div>
         ) : (
           <div className="mt-4 space-y-4">
             {recentApplications.map((application) => (
@@ -172,7 +212,17 @@ export default function DashboardPage() {
                     <p className="mt-1 text-gray-600">{application.company}</p>
                   </div>
 
-                  <span className="w-fit rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+                  <span
+                    className={`w-fit rounded-full px-3 py-1 text-sm font-medium ${
+                      application.status.toUpperCase() === "OFFER"
+                        ? "bg-green-50 text-green-700"
+                        : application.status.toUpperCase() === "REJECTED"
+                          ? "bg-red-50 text-red-700"
+                          : application.status.toUpperCase() === "INTERVIEW"
+                            ? "bg-purple-50 text-purple-700"
+                            : "bg-blue-50 text-blue-700"
+                    }`}
+                  >
                     {application.status}
                   </span>
                 </div>
