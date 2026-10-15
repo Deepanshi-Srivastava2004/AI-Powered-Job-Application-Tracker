@@ -288,6 +288,17 @@ export default function ApplicationsPage() {
             <option value="OFFER">Offer</option>
             <option value="REJECTED">Rejected</option>
           </select>
+
+          {/* Sort applications by application date */}
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            aria-label="Sort applications by date"
+            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:w-56"
+          >
+            <option value="NEWEST">Newest First</option>
+            <option value="OLDEST">Oldest First</option>
+          </select>
         </div>
 
         {error && (
@@ -340,7 +351,7 @@ export default function ApplicationsPage() {
                 </p>
               </div>
             ) : (
-              filteredApplications.map((application) => (
+              sortedApplications.map((application) => (
                 <article
                   key={application.id}
                   className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/30 hover:shadow-md"
