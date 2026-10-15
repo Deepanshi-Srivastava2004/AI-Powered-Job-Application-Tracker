@@ -31,6 +31,9 @@ export default function ApplicationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
+  // Controls how applications are sorted by date.
+  const [sortOrder, setSortOrder] = useState("NEWEST");
+
   const filteredApplications = applications.filter((application) => {
     // Check whether the company or job title matches the search.
     const search = searchTerm.trim().toLowerCase();
@@ -45,6 +48,21 @@ export default function ApplicationsPage() {
 
     // Show an application only when both conditions match.
     return matchesSearch && matchesStatus;
+  });
+
+  // Sort applications based on the selected order.
+  const sortedApplications = [...filteredApplications].sort((a, b) => {
+    if (sortOrder === "NEWEST") {
+      return (
+        new Date(b.applicationDate).getTime() -
+        new Date(a.applicationDate).getTime()
+      );
+    } else {
+      return (
+        new Date(a.applicationDate).getTime() -
+        new Date(b.applicationDate).getTime()
+      );
+    }
   });
 
   const [loading, setLoading] = useState(true);
