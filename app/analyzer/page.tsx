@@ -19,13 +19,53 @@ type JobAnalysis = {
 export default function AnalyzerPage() {
   const [jobDescription, setJobDescription] = useState("");
   const [analysis, setAnalysis] = useState<JobAnalysis | null>(null);
+
+  // Sample skills for testing. Replace these with your own skills.
+  const [userSkills, setUserSkills] = useState("React, TypeScript, SQL");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Convert skill names into a consistent format for comparison.
+  function normalizeSkill(skill: string) {
+    return skill.trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  // Split the entered skills using commas, semicolons, or new lines.
+  const enteredSkills = userSkills
+    .split(/[,;\n]/)
+    .map((skill) => skill.trim())
+    .filter(Boolean);
+
+  // Use a Set for efficient skill lookups.
+  const normalizedUserSkills = new Set(enteredSkills.map(normalizeSkill));
+
+  // Find required skills that the user has entered.
+  const matchedSkills = (analysis?.requiredSkills ?? []).filter((skill) =>
+    normalizedUserSkills.has(normalizeSkill(skill)),
+  );
+
+  // Find required skills that the user has not entered.
+  const missingSkills = (analysis?.requiredSkills ?? []).filter(
+    (skill) => !normalizedUserSkills.has(normalizeSkill(skill)),
+  );
+
+  // Calculate the percentage of required skills matched.
+  const matchPercentage =
+    (analysis?.requiredSkills.length ?? 0) > 0
+      ? Math.round(
+          (matchedSkills.length / analysis!.requiredSkills.length) * 100,
+        )
+      : 0;
 
   async function handleAnalyze() {
     // Validate the input.
     if (!jobDescription.trim()) {
       setError("Please paste a job description first.");
+      return;
+    }
+    if (enteredSkills.length === 0) {
+      setError("Please enter your existing skills first.");
       return;
     }
 
@@ -92,7 +132,6 @@ export default function AnalyzerPage() {
           >
             Paste Job Description
           </label>
-
           <textarea
             id="jobDescription"
             value={jobDescription}
@@ -107,6 +146,31 @@ export default function AnalyzerPage() {
           <div className="mt-2 flex justify-between gap-3 text-xs text-slate-400">
             <span>Include skills and responsibilities for better results.</span>
             <span>{jobDescription.length}/20000</span>
+          </div>
+
+          {/* Let users enter their existing skills. */}
+          <div className="mt-6">
+            <label
+              htmlFor="userSkills"
+              className="mb-3 block text-lg font-semibold"
+            >
+              Your Existing Skills
+            </label>
+
+            <textarea
+              id="userSkills"
+              value={userSkills}
+              onChange={(event) => setUserSkills(event.target.value)}
+              placeholder="Example: React, TypeScript, SQL, Git"
+              rows={3}
+              disabled={loading}
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 p-4 text-sm leading-6 text-white outline-none transition placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-60"
+            />
+
+            <p className="mt-2 text-xs text-slate-400">
+              Separate skills with commas. You can also use semicolons or new
+              lines.
+            </p>
           </div>
 
           <button
@@ -136,6 +200,87 @@ export default function AnalyzerPage() {
 
         {analysis && (
           <section aria-live="polite" className="mt-8 space-y-6">
+            {/* Display the personalized skill matching report. */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold">Your Skill Match</h2>
+                  <p className="mt-1 text-sm text-slate-400">
+                    Based on the required skills identified by Gemini.
+                  </p>
+                </div>
+
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-indigo-400">
+                    {matchPercentage}%
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    Required skills matched
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className="h-full rounded-full bg-indigo-500 transition-all duration-500"
+                  style={{ width: `${matchPercentage}%` }}
+                />
+              </div>
+
+              <p className="mt-3 text-sm text-slate-400">
+                {matchedSkills.length} of {analysis.requiredSkills.length}{" "}
+                required skills matched by name.
+              </p>
+
+              <div className="mt-6 grid gap-6 sm:grid-cols-2">
+                <div>
+                  <h3 className="font-semibold text-emerald-400">
+                    Matching Skills ({matchedSkills.length})
+                  </h3>
+
+                  {matchedSkills.length > 0 ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {matchedSkills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full bg-emerald-950 px-3 py-1.5 text-sm text-emerald-300"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-sm text-slate-400">
+                      No exact skill-name matches found.
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-amber-400">
+                    Skills to Develop ({missingSkills.length})
+                  </h3>
+
+                  {missingSkills.length > 0 ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {missingSkills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full bg-amber-950 px-3 py-1.5 text-sm text-amber-300"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-sm text-slate-400">
+                      All identified required skills matched by name!
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
               <p className="text-sm font-medium text-indigo-400">
                 ANALYSIS RESULTS
