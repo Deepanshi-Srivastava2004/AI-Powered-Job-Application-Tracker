@@ -59,20 +59,29 @@ export default function AnalyzerPage() {
       : 0;
 
   async function handleAnalyze() {
-    // Validate the input.
+    // Validate the job description.
     if (!jobDescription.trim()) {
       setError("Please paste a job description first.");
       return;
     }
+
+    // Validate the user's existing skills.
     if (enteredSkills.length === 0) {
       setError("Please enter your existing skills first.");
       return;
     }
 
-    // Reset previous results and errors.
+    // Reset the previous results and errors.
     setLoading(true);
     setError("");
     setAnalysis(null);
+
+    // Set a 60-second timeout for the API request.
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 60000);
 
     try {
       // Send the job description to our backend API.
@@ -82,8 +91,10 @@ export default function AnalyzerPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ jobDescription }),
+        signal: controller.signal,
       });
 
+      // Read the API response.
       const result = await response.json();
 
       // Handle unsuccessful API responses.
@@ -96,13 +107,21 @@ export default function AnalyzerPage() {
       // Store the AI-generated results.
       setAnalysis(result.data as JobAnalysis);
     } catch (err: unknown) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again.",
-      );
+      // Display a specific message if the request times out.
+      if (err instanceof Error && err.name === "AbortError") {
+        setError(
+          "Analysis took too long. Please try again with a shorter job description.",
+        );
+      } else {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Something went wrong. Please try again.",
+        );
+      }
     } finally {
-      // Always stop the loading indicator.
+      // Clear the timeout and stop the loading indicator.
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   }
