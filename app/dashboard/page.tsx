@@ -108,8 +108,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen p-6 md:p-8">
-      <h1 className="text-3xl font-bold">JobPilot Dashboard</h1>
+    <main className="min-h-screen p-6 md:p-8 bg-[#EEF2FF]">
+      <h1 className="text-3xl text-[#111827] font-bold">JobPilot Dashboard</h1>
 
       <p className="mt-2 text-gray-600">
         Track and manage your job applications in one place.
@@ -122,7 +122,7 @@ export default function DashboardPage() {
 
       {/* Four summary cards with dynamically calculated counts. */}
       <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <div className="rounded-xl border border-blue-100 bg-gradient-to-br from-white to-blue-50 p-5 shadow-sm transition-shadow hover:shadow-md">
+        <div className="rounded-xl border border-blue bg-gradient-to-br from-white to-blue-50 p-5 shadow-sm transition-shadow hover:shadow-md">
           <p className="text-sm text-gray-500">Total Applications</p>
           <p className="mt-2 text-3xl font-bold">{totalApplications}</p>
           <p className="mt-2 text-sm text-gray-500">All tracked applications</p>
@@ -181,7 +181,7 @@ export default function DashboardPage() {
         </div>
 
         {applications.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-dashed border-gray-300 bg-white p-8 text-center">
+          <div className="mt-4 rounded-xl border border-dashed border-[gray-300] bg-white p-8 text-center">
             <h3 className="text-lg font-semibold text-gray-800">
               No applications yet
             </h3>
