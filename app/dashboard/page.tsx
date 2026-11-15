@@ -105,14 +105,14 @@ export default function DashboardPage() {
       : Math.round((progressCount / totalApplications) * 100);
 
   // Display a loading message while fetching data.
-  if (loading) {
+  /* if (loading) {
     return (
       <main className="p-8">
         <h1 className="text-3xl font-bold">Good Morning Deepanshi....</h1>
         <p className="mt-4">Loading your applications...</p>
       </main>
     );
-  }
+  } */
 
   return (
     <main className="min-h-screen bg-slate-950 p-6 text-slate-100 md:p-8">
@@ -152,7 +152,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Applied */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-950/20">
           <span className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
               <TiTick className="text-xl text-emerald-400" />
@@ -164,7 +164,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Interviews */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all  hover:border-blue-800 hover:shadow-lg hover:shadow-blue-950/20">
           <span className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
               <SlCalender className="text-xl text-blue-400" />
@@ -176,7 +176,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Offers */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all  hover:border-amber-300 hover:shadow-lg hover:shadow-amber-950/20">
           <span className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
               <FaStar className="text-xl text-amber-400" />
@@ -188,7 +188,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Rejected */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all  hover:border-red-400 hover:shadow-lg hover:shadow-red-950/20">
           <span className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10">
               <ImCross className="text-xl text-red-400" />
@@ -200,7 +200,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Offer Rate */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all  hover:border-violet-400 hover:shadow-lg hover:shadow-violet-950/20">
           <span className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10">
               <TbAntennaBars5 className="text-xl text-violet-400" />
@@ -214,7 +214,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Job Search Progress */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all hover:shadow-lg">
+        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm transition-all  hover:border-teal-400 hover:shadow-lg hover:shadow-teal-950/20">
           <span className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-500/10">
               <FaSearch className="text-xl text-teal-400" />

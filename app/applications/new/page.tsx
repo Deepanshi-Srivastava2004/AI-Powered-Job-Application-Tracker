@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -41,9 +40,7 @@ export default function NewApplicationPage() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(
-          result.message || "Could not save the application.",
-        );
+        throw new Error(result.message || "Could not save the application.");
       }
 
       // Return to the list after the application is saved.
@@ -61,41 +58,44 @@ export default function NewApplicationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8 md:px-8">
+    <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-200 sm:px-6 md:px-8">
       <div className="mx-auto max-w-3xl">
+        {/* Back Button */}
         <button
           type="button"
           onClick={() => router.push("/applications")}
-          className="mb-6 rounded-lg border bg-white px-4 py-2 hover:bg-gray-100"
+          className="mb-6 inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-sm transition-all duration-200 hover:border-slate-600 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
         >
           ← Back to Applications
         </button>
 
-        <div className="rounded-2xl border bg-white p-6 shadow-sm md:p-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+        {/* Form Card */}
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-lg shadow-black/10 sm:p-6 md:p-8">
+          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             Add New Application
           </h1>
 
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-sm leading-6 text-slate-400 sm:text-base">
             Keep track of a job opportunity you're applying for.
           </p>
 
           {error && (
             <p
               role="alert"
-              className="mt-5 rounded-lg bg-red-50 p-4 text-red-700"
+              className="mt-5 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400"
             >
               {error}
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+            {/* Company Name */}
             <div>
               <label
                 htmlFor="company"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-slate-300"
               >
-                Company Name *
+                Company Name <span className="text-red-400">*</span>
               </label>
 
               <input
@@ -109,16 +109,17 @@ export default function NewApplicationPage() {
                   })
                 }
                 placeholder="e.g. Google"
-                className="w-full rounded-lg border px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-xl border border-slate-700 bg-slate-800/70 px-4 py-3 text-sm text-slate-200 outline-none transition-all duration-200 placeholder:text-slate-500 hover:border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
+            {/* Job Title */}
             <div>
               <label
                 htmlFor="jobTitle"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-slate-300"
               >
-                Job Title *
+                Job Title <span className="text-red-400">*</span>
               </label>
 
               <input
@@ -132,14 +133,15 @@ export default function NewApplicationPage() {
                   })
                 }
                 placeholder="e.g. Frontend Developer"
-                className="w-full rounded-lg border px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-xl border border-slate-700 bg-slate-800/70 px-4 py-3 text-sm text-slate-200 outline-none transition-all duration-200 placeholder:text-slate-500 hover:border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
+            {/* Job Description */}
             <div>
               <label
                 htmlFor="jobDescription"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-slate-300"
               >
                 Job Description
               </label>
@@ -155,14 +157,15 @@ export default function NewApplicationPage() {
                   })
                 }
                 placeholder="Paste the job description here..."
-                className="w-full rounded-lg border px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full resize-y rounded-xl border border-slate-700 bg-slate-800/70 px-4 py-3 text-sm leading-6 text-slate-200 outline-none transition-all duration-200 placeholder:text-slate-500 hover:border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
+            {/* Job Posting URL */}
             <div>
               <label
                 htmlFor="jobUrl"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-slate-300"
               >
                 Job Posting URL
               </label>
@@ -178,14 +181,15 @@ export default function NewApplicationPage() {
                   })
                 }
                 placeholder="https://example.com/jobs/123"
-                className="w-full rounded-lg border px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full rounded-xl border border-slate-700 bg-slate-800/70 px-4 py-3 text-sm text-slate-200 outline-none transition-all duration-200 placeholder:text-slate-500 hover:border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
+            {/* Notes */}
             <div>
               <label
                 htmlFor="notes"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-2 block text-sm font-medium text-slate-300"
               >
                 Notes
               </label>
@@ -201,15 +205,16 @@ export default function NewApplicationPage() {
                   })
                 }
                 placeholder="Recruiter details, follow-up dates, etc."
-                className="w-full rounded-lg border px-4 py-3 outline-none focus:border-blue-500"
+                className="w-full resize-y rounded-xl border border-slate-700 bg-slate-800/70 px-4 py-3 text-sm leading-6 text-slate-200 outline-none transition-all duration-200 placeholder:text-slate-500 hover:border-slate-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
-            <div className="flex flex-wrap gap-3 pt-2">
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-3 border-t border-slate-800 pt-6 sm:flex-row sm:items-center">
               <button
                 type="submit"
                 disabled={saving}
-                className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                className="rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving ? "Saving..." : "Save Application"}
               </button>
@@ -217,7 +222,7 @@ export default function NewApplicationPage() {
               <button
                 type="button"
                 onClick={() => router.push("/applications")}
-                className="rounded-lg border px-6 py-3 font-medium hover:bg-gray-50"
+                className="rounded-xl border border-slate-700 px-6 py-3 text-sm font-semibold text-slate-300 transition-all duration-200 hover:border-slate-600 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               >
                 Cancel
               </button>

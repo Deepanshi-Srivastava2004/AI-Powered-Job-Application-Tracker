@@ -17,19 +17,19 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="border-b bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between py-4">
+    <nav className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/95 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         {/* Application logo/name */}
         <Link
           href="/"
-          className="flex items-center text-xl text-[#111827] font-bold"
+          className="flex shrink-0 items-center gap-2 text-xl font-bold tracking-tight text-white transition-colors duration-200 hover:text-indigo-400"
         >
-          <FaTelegramPlane className="mr-1 text-[#6366F1]" />
+          <FaTelegramPlane className="text-2xl text-indigo-400" />
           JobPilot
         </Link>
 
         {/* Navigation links */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
 
@@ -39,15 +39,15 @@ export default function Navbar() {
                 href={link.href}
                 className={`relative py-2 text-sm transition-colors duration-300 ease-in-out ${
                   isActive
-                    ? "font-semibold text-[#6366F1]"
-                    : "text-gray-600 hover:text-[#6366F1]"
+                    ? "font-semibold text-indigo-400"
+                    : "font-medium text-slate-400 hover:text-indigo-400"
                 }`}
               >
                 {link.name}
 
                 {/* Animated underline */}
                 <span
-                  className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-[#6366F1] transition-all duration-300 ease-in-out ${
+                  className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-indigo-400 transition-all duration-300 ease-in-out ${
                     isActive ? "w-full opacity-100" : "w-0 opacity-0"
                   }`}
                 />
