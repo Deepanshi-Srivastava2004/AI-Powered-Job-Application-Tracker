@@ -240,17 +240,17 @@ export default function ApplicationsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-8 md:px-8">
+    <main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-200 md:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
               My Applications
             </h1>
 
             <button
               onClick={() => router.push("/applications/new")}
-              className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
+              className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-500 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
               + Add Application
             </button>
@@ -259,7 +259,7 @@ export default function ApplicationsPage() {
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="w-fit rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-sm transition-all duration-200 hover:border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-fit rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-slate-300 shadow-sm transition-all duration-200 hover:border-slate-600 hover:bg-slate-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
           >
             ← Back to Dashboard
           </button>
@@ -273,14 +273,14 @@ export default function ApplicationsPage() {
             placeholder="Search by company or job title..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 shadow-sm outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+            className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-200 shadow-sm outline-none transition-all duration-200 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
           />
 
           {/* Filter applications by status */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:w-56"
+            className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-300 shadow-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:w-56"
           >
             <option value="ALL">All Statuses</option>
             <option value="APPLIED">Applied</option>
@@ -294,7 +294,7 @@ export default function ApplicationsPage() {
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             aria-label="Sort applications by date"
-            className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm outline-none transition-all duration-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:w-56"
+            className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-300 shadow-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 sm:w-56"
           >
             <option value="NEWEST">Newest First</option>
             <option value="OLDEST">Oldest First</option>
@@ -304,7 +304,7 @@ export default function ApplicationsPage() {
         {error && (
           <p
             role="alert"
-            className="mt-6 rounded-lg bg-red-50 p-4 text-red-700"
+            className="mt-6 rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-red-400"
           >
             {error}
           </p>
@@ -313,22 +313,24 @@ export default function ApplicationsPage() {
         {message && (
           <p
             role="status"
-            className="mt-6 rounded-lg bg-green-50 p-4 text-green-700"
+            className="mt-6 rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-4 text-emerald-400"
           >
             {message}
           </p>
         )}
 
         {loading && (
-          <p className="mt-8 rounded-lg border bg-white p-5 text-gray-600">
+          <p className="mt-8 rounded-lg border border-slate-800 bg-slate-900 p-5 text-slate-400">
             Loading your applications...
           </p>
         )}
 
         {!loading && applications.length === 0 && (
-          <div className="mt-8 rounded-xl border bg-white p-8 text-center">
-            <h2 className="text-xl font-semibold">No applications yet</h2>
-            <p className="mt-2 text-gray-600">
+          <div className="mt-8 rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
+            <h2 className="text-xl font-semibold text-white">
+              No applications yet
+            </h2>
+            <p className="mt-2 text-slate-400">
               Add your first job application to start tracking your progress.
             </p>
           </div>
@@ -336,17 +338,17 @@ export default function ApplicationsPage() {
 
         {!loading && applications.length > 0 && (
           <section className="mt-8 space-y-4">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-slate-500">
               {filteredApplications.length} application
               {filteredApplications.length === 1 ? "" : "s"} found
             </p>
 
             {filteredApplications.length === 0 ? (
-              <div className="rounded-xl border bg-white p-8 text-center">
-                <h2 className="text-lg font-semibold">
+              <div className="rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
+                <h2 className="text-lg font-semibold text-white">
                   No matching applications
                 </h2>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-slate-400">
                   Try another search term or select a different status.
                 </p>
               </div>
@@ -354,17 +356,19 @@ export default function ApplicationsPage() {
               sortedApplications.map((application) => (
                 <article
                   key={application.id}
-                  className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/30 hover:shadow-md"
+                  className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-sm transition-all duration-200 hover:border-indigo-500/40 hover:bg-slate-900/80 hover:shadow-md"
                 >
                   <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                     <div>
-                      <h2 className="text-xl font-semibold text-gray-900">
+                      <h2 className="text-xl font-semibold text-white">
                         {application.jobTitle}
                       </h2>
-                      <p className="mt-1 text-gray-600">
+
+                      <p className="mt-1 text-slate-400">
                         {application.company}
                       </p>
-                      <p className="mt-3 text-sm text-gray-500">
+
+                      <p className="mt-3 text-sm text-slate-500">
                         Applied on:{" "}
                         {new Date(
                           application.applicationDate,
@@ -375,7 +379,7 @@ export default function ApplicationsPage() {
                     <div className="flex flex-col gap-2">
                       <label
                         htmlFor={`status-${application.id}`}
-                        className="text-sm font-medium text-gray-700"
+                        className="text-sm font-medium text-slate-300"
                       >
                         Application Status
                       </label>
@@ -387,7 +391,7 @@ export default function ApplicationsPage() {
                         onChange={(event) =>
                           handleStatusChange(application.id, event.target.value)
                         }
-                        className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-300 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {applicationStatuses.map((status) => (
                           <option key={status} value={status}>
@@ -400,17 +404,18 @@ export default function ApplicationsPage() {
 
                   {editingId === application.id ? (
                     <form onSubmit={handleSaveEdit} className="mt-6 space-y-4">
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-lg font-semibold text-white">
                         Edit Application
                       </h3>
 
                       <div>
                         <label
                           htmlFor="edit-company"
-                          className="mb-1 block text-sm font-medium"
+                          className="mb-1 block text-sm font-medium text-slate-300"
                         >
                           Company Name *
                         </label>
+
                         <input
                           id="edit-company"
                           required
@@ -421,17 +426,18 @@ export default function ApplicationsPage() {
                               company: event.target.value,
                             })
                           }
-                          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                         />
                       </div>
 
                       <div>
                         <label
                           htmlFor="edit-title"
-                          className="mb-1 block text-sm font-medium"
+                          className="mb-1 block text-sm font-medium text-slate-300"
                         >
                           Job Title *
                         </label>
+
                         <input
                           id="edit-title"
                           required
@@ -442,17 +448,18 @@ export default function ApplicationsPage() {
                               jobTitle: event.target.value,
                             })
                           }
-                          className="w-full rounded-lg border px-3 py-2"
+                          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                         />
                       </div>
 
                       <div>
                         <label
                           htmlFor="edit-description"
-                          className="mb-1 block text-sm font-medium"
+                          className="mb-1 block text-sm font-medium text-slate-300"
                         >
                           Job Description
                         </label>
+
                         <textarea
                           id="edit-description"
                           rows={4}
@@ -463,17 +470,18 @@ export default function ApplicationsPage() {
                               jobDescription: event.target.value,
                             })
                           }
-                          className="w-full rounded-lg border px-3 py-2"
+                          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                         />
                       </div>
 
                       <div>
                         <label
                           htmlFor="edit-url"
-                          className="mb-1 block text-sm font-medium"
+                          className="mb-1 block text-sm font-medium text-slate-300"
                         >
                           Job Posting URL
                         </label>
+
                         <input
                           id="edit-url"
                           type="url"
@@ -484,17 +492,18 @@ export default function ApplicationsPage() {
                               jobUrl: event.target.value,
                             })
                           }
-                          className="w-full rounded-lg border px-3 py-2"
+                          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                         />
                       </div>
 
                       <div>
                         <label
                           htmlFor="edit-notes"
-                          className="mb-1 block text-sm font-medium"
+                          className="mb-1 block text-sm font-medium text-slate-300"
                         >
                           Notes
                         </label>
+
                         <textarea
                           id="edit-notes"
                           rows={3}
@@ -505,7 +514,7 @@ export default function ApplicationsPage() {
                               notes: event.target.value,
                             })
                           }
-                          className="w-full rounded-lg border px-3 py-2"
+                          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                         />
                       </div>
 
@@ -513,7 +522,7 @@ export default function ApplicationsPage() {
                         <button
                           type="submit"
                           disabled={updatingId === application.id}
-                          className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                          className="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {updatingId === application.id
                             ? "Saving..."
@@ -523,7 +532,7 @@ export default function ApplicationsPage() {
                         <button
                           type="button"
                           onClick={() => setEditingId(null)}
-                          className="rounded-lg border px-4 py-2 font-medium hover:bg-gray-50"
+                          className="rounded-lg border border-slate-700 px-4 py-2 font-medium text-slate-300 transition hover:bg-slate-800"
                         >
                           Cancel
                         </button>
@@ -532,7 +541,7 @@ export default function ApplicationsPage() {
                   ) : (
                     <>
                       {application.jobDescription && (
-                        <p className="mt-4 whitespace-pre-wrap text-sm text-gray-600">
+                        <p className="mt-4 whitespace-pre-wrap text-sm text-slate-400">
                           {application.jobDescription}
                         </p>
                       )}
@@ -542,15 +551,17 @@ export default function ApplicationsPage() {
                           href={application.jobUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-3 inline-block break-all text-sm text-blue-600 hover:underline"
+                          className="mt-3 inline-block break-all text-sm text-indigo-400 hover:text-indigo-300 hover:underline"
                         >
                           View Job Posting ↗
                         </a>
                       )}
 
                       {application.notes && (
-                        <p className="mt-3 text-sm text-gray-600">
-                          <span className="font-medium">Notes:</span>{" "}
+                        <p className="mt-3 text-sm text-slate-400">
+                          <span className="font-medium text-slate-300">
+                            Notes:
+                          </span>{" "}
                           {application.notes}
                         </p>
                       )}
@@ -560,7 +571,7 @@ export default function ApplicationsPage() {
                           type="button"
                           onClick={() => handleEdit(application)}
                           disabled={updatingId === application.id}
-                          className="rounded-lg border px-4 py-2 font-medium hover:bg-gray-50 disabled:opacity-60"
+                          className="rounded-lg border border-slate-700 px-4 py-2 font-medium text-slate-300 transition hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-indigo-300 disabled:opacity-60"
                         >
                           Edit
                         </button>
@@ -569,7 +580,7 @@ export default function ApplicationsPage() {
                           type="button"
                           onClick={() => handleDelete(application.id)}
                           disabled={updatingId === application.id}
-                          className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 disabled:opacity-60"
+                          className="rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           {updatingId === application.id
                             ? "Please wait..."

@@ -18,13 +18,13 @@ export default function Navbar() {
 
   return (
     <nav className="border-b bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between py-4">
         {/* Application logo/name */}
         <Link
           href="/"
           className="flex items-center text-xl text-[#111827] font-bold"
         >
-          <FaTelegramPlane className="mr-2 text-[#6366F1]" />
+          <FaTelegramPlane className="mr-1 text-[#6366F1]" />
           JobPilot
         </Link>
 
